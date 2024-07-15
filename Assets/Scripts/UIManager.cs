@@ -9,20 +9,22 @@ public class UIManager : MonoBehaviour
 {
     public GameObject[] items; // 상점 아이템 프리팹들
     private GameObject selectedItem;
+    private int selectedItemIdx = -1;  // 선택된 아이템 인덱스를 저장할 변수
     private bool isPlacingItem = false;
     public TMP_Text coin;
     public GameObject storeMenuBtns;
     public Button CreateTowerBtn;
     public Button EnhanceTowerBtn;
     public Button EnhancePlayerBtn;
-    
+
     public GameObject createTowerBtns;
     public Button BackBtn_0;
     public GameObject EnhanceTowerBtns;
     public Button BackBtn_1;
     public GameObject EnhancePlayerBtns;
     public Button BackBtn_2;
-    
+
+    private Camera mainCamera;
 
     void Start()
     {
@@ -32,6 +34,8 @@ public class UIManager : MonoBehaviour
         BackBtn_0.onClick.AddListener(OnBackButtonClicked);
         BackBtn_1.onClick.AddListener(OnBackButtonClicked);
         BackBtn_2.onClick.AddListener(OnBackButtonClicked);
+
+        mainCamera = Camera.main;
     }
 
     void OnCreateTowerBtnClicked()
@@ -39,16 +43,19 @@ public class UIManager : MonoBehaviour
         createTowerBtns.SetActive(true);
         storeMenuBtns.SetActive(false);
     }
+
     void OnEnhanceTowerButtonClicked()
     {
         EnhanceTowerBtns.SetActive(true);
         storeMenuBtns.SetActive(false);
     }
+
     void OnEnhancePlayerButtonClicked()
     {
         EnhancePlayerBtns.SetActive(true);
         storeMenuBtns.SetActive(false);
     }
+
     void OnBackButtonClicked()
     {
         createTowerBtns.SetActive(false);
@@ -61,13 +68,16 @@ public class UIManager : MonoBehaviour
     {
         if (isPlacingItem && selectedItem != null)
         {
-            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePosition.z = 0;
-            selectedItem.transform.position = mousePosition;
+            Vector3 mousePosition = Input.mousePosition;
+            mousePosition.z = Mathf.Abs(mainCamera.transform.position.z);  // 카메라의 z 위치를 고려하여 조정
+
+            Vector3 worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
+            worldPosition.z = 0;  // 여기서 z를 0으로 설정합니다.
+            selectedItem.transform.position = worldPosition;
 
             if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
             {
-                PlaceItem();
+                PlaceItem(worldPosition);
             }
         }
     }
@@ -80,13 +90,18 @@ public class UIManager : MonoBehaviour
         }
 
         selectedItem = Instantiate(items[itemIndex]);
+        selectedItemIdx = itemIndex;
         isPlacingItem = true;
     }
 
-    void PlaceItem()
+    void PlaceItem(Vector3 position)
     {
-        // 아이템을 배치할 위치를 결정하고, 필요한 로직을 추가합니다.
-        isPlacingItem = false;
+        Instantiate(items[selectedItemIdx], position, Quaternion.identity);
+
+        // 초기화
+        Destroy(selectedItem);
         selectedItem = null;
+        selectedItemIdx = -1;
+        isPlacingItem = false;
     }
 }
