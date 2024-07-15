@@ -45,6 +45,7 @@ public class HomeGM : MonoBehaviour
         towerSettingButton.onClick.AddListener(OnTowerSettingButtonClicked);
 
         UpdateStageText();
+        
     }
 
 
@@ -118,4 +119,5 @@ public class HomeGM : MonoBehaviour
         playerSettingParts.SetActive(false);
         towerSettingParts.SetActive(true);
     }
+    
 }
