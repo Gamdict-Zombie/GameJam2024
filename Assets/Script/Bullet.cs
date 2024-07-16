@@ -1,18 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public float damage;
+    public int per;
+
+    Rigidbody2D rigid;
+
+    void Awake(){
+        rigid = this.GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void Init(float damage, int per, Vector3 dir){
+        this.damage = damage;
+        this.per = per;
+
+        if(per > -1){
+            rigid.velocity = dir *15;
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collision){
+        if(!collision.CompareTag("Enemy") || per == -1){
+            return;
+        }
+
+        per--;
+
+        if(per == -1){
+            rigid.velocity = Vector2.zero;
+            gameObject.SetActive(false);
+        }
     }
 }
