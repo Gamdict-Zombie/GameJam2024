@@ -1,8 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using System.Numerics;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
+
+
+
 
 public class Enemy : MonoBehaviour
 {
@@ -13,29 +17,27 @@ public class Enemy : MonoBehaviour
 
     Rigidbody2D rigid;
     SpriteRenderer spriter;
-
-
     void Awake()
     {
         rigid = this.GetComponent<Rigidbody2D>();
         spriter = this.GetComponent<SpriteRenderer>();
     }
 
+    
+        
+    // Update is called once per frame
     void FixedUpdate()
     {
-        if (!isLive) 
-            return;
-        
+        if(!isLive) return;
+
         Vector2 dirVec = target.position - rigid.position;
         Vector2 nextVec = dirVec.normalized * speed * Time.fixedDeltaTime;
         rigid.MovePosition(rigid.position + nextVec);
-        rigid.velocity = Vector2.zero;
+        rigid.velocity = Vector2.zero;  
     }
 
     void LateUpdate(){
-        if (!isLive) 
-            return;
-        
+        if(!isLive) return;
         spriter.flipX = target.position.x < rigid.position.x;
     }
 }

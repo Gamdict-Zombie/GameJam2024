@@ -45,6 +45,7 @@ public class HomeGM : MonoBehaviour
         towerSettingButton.onClick.AddListener(OnTowerSettingButtonClicked);
 
         UpdateStageText();
+        
     }
 
 
@@ -83,7 +84,7 @@ public class HomeGM : MonoBehaviour
         // 예시로 'GameScene'이라는 이름의 씬을 로드합니다.
         Debug.Log("Play Button Clicked");
         // SceneManager.LoadScene("SampleScene"); 
-        SceneManager.LoadScene("Stage" + currentStage.ToString()); 
+        SceneManager.LoadScene("CJH_Stage" + currentStage.ToString()); 
     }
     void OnNextStageButtonClicked()
     {
@@ -118,4 +119,5 @@ public class HomeGM : MonoBehaviour
         playerSettingParts.SetActive(false);
         towerSettingParts.SetActive(true);
     }
+    
 }

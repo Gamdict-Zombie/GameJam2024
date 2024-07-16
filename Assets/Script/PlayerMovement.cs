@@ -1,28 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed  ;
-    private Rigidbody2D rb;
-    private Vector2 moveVelocity;
+    public Vector2 inputVec;
+    public float speed;
+
+    Rigidbody2D rigid;
+    SpriteRenderer spriter;
+    Animator anim;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        speed = 10f;
+        rigid = GetComponent<Rigidbody2D>();
+        spriter = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        moveVelocity = moveInput.normalized * speed;
+        inputVec.x = Input.GetAxis("Horizontal");
+        inputVec.y = Input.GetAxis("Vertical");  
     }
 
     void FixedUpdate(){
-        rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
+        //rigid.AddForce(inputVec);
+        //rigid.velocity = inputVec;
+        Vector2 nextVec = inputVec.normalized * speed * Time.fixedDeltaTime;
+        rigid.MovePosition(rigid.position + nextVec);
+    }
+
+    void LateUpdate(){
+        anim.SetFloat("Speed", inputVec.magnitude); 
+        if(inputVec.x != 0){
+            spriter.flipX = inputVec.x < 0;
+        }
     }
 }
