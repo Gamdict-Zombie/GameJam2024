@@ -1,8 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using System.Data.Common;
 using Unity.VisualScripting;
+
+
+using System.Numerics;
+
 using UnityEngine;
+using Vector2 = UnityEngine.Vector2;
+
+
+
 
 public class Enemy : MonoBehaviour
 {
@@ -17,7 +26,6 @@ public class Enemy : MonoBehaviour
     Rigidbody2D rigid;
     Animator anim;
     SpriteRenderer spriter;
-    // Start is called before the first frame update
     void Awake()
     {
         rigid = this.GetComponent<Rigidbody2D>();
@@ -25,6 +33,8 @@ public class Enemy : MonoBehaviour
         anim = this.GetComponent<Animator>();
     }
 
+    
+        
     // Update is called once per frame
     void FixedUpdate()
     {
